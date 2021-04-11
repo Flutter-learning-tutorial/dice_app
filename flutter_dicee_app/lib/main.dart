@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'dart:math';
 
 void main() {
   runApp(DiceScreen());
@@ -17,54 +18,52 @@ class DiceScreen extends StatelessWidget {
           title: Text("Dice Home"),
           backgroundColor: Colors.grey[800],
         ),
-        body: DiceBodyContainer(),
+        body: DicePage(),
       ),
     );
   }
 }
 
-class DiceBodyContainer extends StatelessWidget {
-  const DiceBodyContainer({
-    Key key,
-  }) : super(key: key);
+class DicePage extends StatefulWidget {
+  @override
+  _DicePageState createState() => _DicePageState();
+}
+
+class _DicePageState extends State<DicePage> {
+  int leftDiceNumber = 1;
+  int rightDiceNumber = 1;
 
   @override
   Widget build(BuildContext context) {
-    var leftDiceNumber = 2;
     return Center(
       child: Row(
         children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextButton(
-                onPressed: () {
-                  print('left button tapped');
-                },
-                style: TextButton.styleFrom(primary: Colors.grey),
-                child: Image.asset(
-                  "images/dice$leftDiceNumber.png",
-                  color: Colors.grey[800],
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextButton(
-                onPressed: () {
-                  print('right button tapped');
-                },
-                style: TextButton.styleFrom(primary: Colors.grey),
-                child: Image.asset(
-                  "images/dice1.png",
-                  color: Colors.grey[800],
-                ),
-              ),
-            ),
-          ),
+          getDice(leftDiceNumber),
+          getDice(rightDiceNumber),
         ],
+      ),
+    );
+  }
+
+  Expanded getDice(int diceNumber) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: TextButton(
+          onPressed: () {
+            setState(() {
+              leftDiceNumber = Random().nextInt(5) + 1;
+              rightDiceNumber = Random().nextInt(5) + 1;
+              print('left dice: $leftDiceNumber');
+              print('Right dice: $rightDiceNumber');
+            });
+          },
+          style: TextButton.styleFrom(primary: Colors.grey),
+          child: Image.asset(
+            "images/dice$diceNumber.png",
+            color: Colors.grey[800],
+          ),
+        ),
       ),
     );
   }
